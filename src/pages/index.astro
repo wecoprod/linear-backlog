@@ -1,0 +1,67 @@
+---
+import KanbanBoard from '../components/KanbanBoard.astro';
+import { getBacklog } from '../lib/linear';
+import type { BacklogData } from '../lib/linear';
+
+const label = import.meta.env.LINEAR_LABEL ?? 'show-backlog';
+
+let columns: BacklogData = [];
+let error: string | null = null;
+
+try {
+  columns = await getBacklog();
+} catch (err) {
+  error = err instanceof Error ? err.message : 'Failed to load issues';
+  console.error('[linear-backlog] Failed to load backlog:', err);
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backlog</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8f9fa;
+      color: #1a1a1a;
+    }
+    header {
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e0e0e0;
+      background: #fff;
+      display: flex;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    .error {
+      margin: 2rem;
+      padding: 1rem 1.5rem;
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 6px;
+      color: #664d03;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Backlog</h1>
+  </header>
+  {error ? (
+    <div class="error">
+      <strong>Could not load issues.</strong> {error}
+    </div>
+  ) : (
+    <KanbanBoard columns={columns} label={label} />
+  )}
+</body>
+</html>

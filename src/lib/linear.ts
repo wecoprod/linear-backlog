@@ -65,7 +65,7 @@ export async function getBacklog(): Promise<BacklogData> {
   const token = import.meta.env.LINEAR_API_TOKEN as string;
   const teamId = import.meta.env.LINEAR_TEAM_ID as string;
   const label = import.meta.env.LINEAR_LABEL as string;
-  const ttl = parseInt(import.meta.env.CACHE_TTL ?? '60', 10);
+  const ttl = Math.max(1, parseInt(import.meta.env.CACHE_TTL ?? '60', 10) || 60);
 
   if (!token || !teamId || !label) {
     throw new Error('Missing env vars: LINEAR_API_TOKEN, LINEAR_TEAM_ID, LINEAR_LABEL');

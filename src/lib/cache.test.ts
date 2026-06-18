@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { TTLCache } from './cache';
 
 describe('TTLCache', () => {
@@ -6,6 +6,9 @@ describe('TTLCache', () => {
 
   beforeEach(() => {
     cache = new TTLCache<string>();
+  });
+
+  afterEach(() => {
     vi.useRealTimers();
   });
 
@@ -34,5 +37,10 @@ describe('TTLCache', () => {
     cache.set('key', 'old', 60);
     cache.set('key', 'new', 60);
     expect(cache.get('key')!.data).toBe('new');
+  });
+
+  it('treats TTL=0 as immediately stale', () => {
+    cache.set('key', 'value', 0);
+    expect(cache.get('key')!.isStale).toBe(true);
   });
 });

@@ -11,7 +11,7 @@ export class TTLCache<T> {
     if (!entry) return null;
     return {
       data: entry.data,
-      isStale: Date.now() > entry.expiresAt,
+      isStale: Date.now() >= entry.expiresAt,
     };
   }
 

@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    ports:
+      - "4321:4321"
+    environment:
+      HOST: "0.0.0.0"
+      LINEAR_API_TOKEN: ${LINEAR_API_TOKEN}
+      LINEAR_TEAM_ID: ${LINEAR_TEAM_ID}
+      LINEAR_LABEL: ${LINEAR_LABEL}
+      CACHE_TTL: ${CACHE_TTL:-60}

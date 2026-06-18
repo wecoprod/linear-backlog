@@ -1,0 +1,42 @@
+---
+import type { Issue } from '../lib/linear';
+
+interface Props {
+  issue: Issue;
+}
+
+const { issue } = Astro.props;
+
+const d = new Date(issue.updatedAt);
+const formatted = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+---
+
+<div class="card">
+  <div class="title">{issue.title}</div>
+  <div class="meta">Updated {formatted}</div>
+</div>
+
+<style>
+  .card {
+    background: #f8f9fa;
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  .card:hover {
+    border-color: #bbb;
+    background: #fff;
+  }
+  .title {
+    font-weight: 500;
+    color: #1a1a1a;
+    word-break: break-word;
+  }
+  .meta {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #999;
+  }
+</style>

@@ -4,6 +4,7 @@ import { getBacklog } from '../lib/linear';
 import type { BacklogData } from '../lib/linear';
 
 const label = import.meta.env.LINEAR_LABEL ?? 'show-backlog';
+const brand = import.meta.env.BRAND_COLOR ?? '#6366f1';
 
 let columns: BacklogData = [];
 let error: string | null = null;
@@ -17,7 +18,7 @@ try {
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style={`--brand:${brand};--brand-bg:color-mix(in srgb,${brand} 6%,#f8f9fa);--brand-border:color-mix(in srgb,${brand} 18%,#e0e0e0);--brand-glow:color-mix(in srgb,${brand} 20%,white);--brand-card-bg:color-mix(in srgb,${brand} 3%,#f8f9fa)`}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,12 +28,12 @@ try {
     body {
       margin: 0;
       font-family: system-ui, -apple-system, sans-serif;
-      background: #f8f9fa;
+      background: var(--brand-bg);
       color: #1a1a1a;
     }
     header {
       padding: 1rem 2rem;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--brand-border);
       background: #fff;
       display: flex;
       align-items: center;

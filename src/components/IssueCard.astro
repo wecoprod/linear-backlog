@@ -44,8 +44,8 @@ if (issue.dueDate) {
 <style>
   .card {
     display: block;
-    background: #f8f9fa;
-    border: 1px solid #e8e8e8;
+    background: var(--brand-card-bg, #f8f9fa);
+    border: 1px solid var(--brand-border, #e8e8e8);
     border-radius: 6px;
     padding: 0.625rem 0.75rem;
     font-size: 0.875rem;
@@ -55,9 +55,9 @@ if (issue.dueDate) {
     cursor: pointer;
   }
   .card:hover {
-    border-color: #6366f1;
+    border-color: var(--brand, #6366f1);
     background: #fff;
-    box-shadow: 0 0 0 2px #e0e7ff;
+    box-shadow: 0 0 0 2px var(--brand-glow, #e0e7ff);
   }
   .title {
     font-weight: 500;

@@ -77,7 +77,7 @@ export async function getBacklog(): Promise<BacklogData> {
   try {
     const [statesData, issuesData] = await Promise.all([
       linearQuery<{ workflowStates: { nodes: WorkflowState[] } }>(
-        `query($teamId: String!) {
+        `query($teamId: ID!) {
           workflowStates(filter: { team: { id: { eq: $teamId } } }) {
             nodes { id name color position type }
           }
@@ -86,7 +86,7 @@ export async function getBacklog(): Promise<BacklogData> {
         token
       ),
       linearQuery<{ issues: { nodes: Issue[] } }>(
-        `query($teamId: String!, $label: String!) {
+        `query($teamId: ID!, $label: String!) {
           issues(filter: { team: { id: { eq: $teamId } }, labels: { name: { eq: $label } } }) {
             nodes { id title updatedAt state { id } }
           }

@@ -31,51 +31,31 @@ if (issue.dueDate) {
 }
 ---
 
-<a class="card" href={issue.url} target="_blank" rel="noopener noreferrer">
+<div class="card">
   <div class="title">{issue.title}</div>
-  {completedLabel && <div class="completed">{completedLabel}</div>}
-  {dueDateLabel && (
-    <div class={`due ${isOverdue ? 'overdue' : ''}`}>
-      📅 {dueDateLabel}
-    </div>
-  )}
-</a>
+  {completedLabel && <div class="meta success">{completedLabel}</div>}
+  {dueDateLabel && <div class={`meta ${isOverdue ? 'danger' : ''}`}>📅 {dueDateLabel}</div>}
+</div>
 
 <style>
   .card {
-    display: block;
     background: var(--brand-card-bg, #f8f9fa);
     border: 1px solid var(--brand-border, #e8e8e8);
     border-radius: 6px;
     padding: 0.625rem 0.75rem;
     font-size: 0.875rem;
     line-height: 1.4;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-  }
-  .card:hover {
-    border-color: var(--brand, #6366f1);
-    background: #fff;
-    box-shadow: 0 0 0 2px var(--brand-glow, #e0e7ff);
   }
   .title {
     font-weight: 500;
     color: #1a1a1a;
-    word-break: break-word;
+    overflow-wrap: break-word;
   }
-  .due {
+  .meta {
     margin-top: 0.35rem;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     color: #6b7280;
   }
-  .due.overdue {
-    color: #dc2626;
-    font-weight: 600;
-  }
-  .completed {
-    margin-top: 0.35rem;
-    font-size: 0.72rem;
-    color: #16a34a;
-  }
+  .meta.success { color: #16a34a; }
+  .meta.danger  { color: #dc2626; font-weight: 600; }
 </style>

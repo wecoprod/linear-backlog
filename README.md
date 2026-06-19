@@ -4,6 +4,8 @@ A self-hosted public kanban board that pulls issues from Linear and displays the
 
 Filter issues by a label (e.g. `show-backlog`) — only those issues appear on the board, grouped by workflow state.
 
+**Live example:** [backlog.wecopost.com](https://backlog.wecopost.com)
+
 ## Setup
 
 1. Clone the repo and install dependencies:

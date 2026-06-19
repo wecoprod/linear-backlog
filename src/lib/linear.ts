@@ -67,6 +67,7 @@ export async function getBacklog(): Promise<BacklogData> {
   const token = import.meta.env.LINEAR_API_TOKEN as string;
   const teamId = import.meta.env.LINEAR_TEAM_ID as string;
   const label = import.meta.env.LINEAR_LABEL as string;
+  const projectId = import.meta.env.LINEAR_PROJECT_ID as string | undefined;
   const ttl = Math.max(1, parseInt(import.meta.env.CACHE_TTL ?? '60', 10) || 60);
 
   if (!token || !teamId || !label) {
@@ -75,6 +76,10 @@ export async function getBacklog(): Promise<BacklogData> {
 
   const cached = cache.get('backlog');
   if (cached && !cached.isStale) return cached.data;
+
+  const projectFilter = projectId ? `, project: { id: { eq: $projectId } }` : '';
+  const projectVar = projectId ? `, $projectId: ID!` : '';
+  const projectVarValue: Record<string, string> = projectId ? { teamId, label, projectId } : { teamId, label };
 
   try {
     const [statesData, issuesData] = await Promise.all([
@@ -88,12 +93,12 @@ export async function getBacklog(): Promise<BacklogData> {
         token
       ),
       linearQuery<{ issues: { nodes: Issue[] } }>(
-        `query($teamId: ID!, $label: String!) {
-          issues(filter: { team: { id: { eq: $teamId } }, labels: { name: { eq: $label } } }) {
+        `query($teamId: ID!, $label: String!${projectVar}) {
+          issues(filter: { team: { id: { eq: $teamId } }, labels: { name: { eq: $label } }${projectFilter} }) {
             nodes { id title url dueDate completedAt updatedAt state { id } }
           }
         }`,
-        { teamId, label },
+        projectVarValue,
         token
       ),
     ]);

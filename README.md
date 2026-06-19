@@ -24,6 +24,7 @@ cp .env.example .env
 |---|---|---|
 | `LINEAR_API_TOKEN` | ✓ | Linear personal API key (Settings → API → Personal API keys) |
 | `LINEAR_TEAM_ID` | ✓ | UUID of the Linear team (visible in the team URL or API) |
+| `LINEAR_PROJECT_ID` | | UUID of a Linear project to filter issues (leave empty for all projects) |
 | `LINEAR_LABEL` | ✓ | Label name to filter issues (e.g. `show-backlog`) |
 | `CACHE_TTL` | | Cache duration in seconds (default: `60`) |
 | `BRAND_COLOR` | | Hex color for theming borders and backgrounds (default: `"#6366f1"`) — wrap in quotes |

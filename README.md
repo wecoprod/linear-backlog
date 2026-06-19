@@ -59,6 +59,20 @@ docker run -p 4321:4321 --env-file .env ghcr.io/wecoprod/linear-backlog:latest
 
 > **Note:** `docker compose up` uses the pre-built image from GitHub Container Registry and reads your `.env` file.
 
+To add linear-backlog to an existing `docker-compose.yml`:
+
+```yaml
+services:
+  linear-backlog:
+    image: ghcr.io/wecoprod/linear-backlog:latest
+    ports:
+      - "4321:4321"
+    environment:
+      LINEAR_API_TOKEN: your-token
+      LINEAR_TEAM_ID: your-team-uuid
+      LINEAR_LABEL: show-backlog
+```
+
 ## How it works
 
 On each page load, the app fetches workflow states and matching issues from the Linear GraphQL API, groups them by state, and renders a kanban board server-side. Responses are cached in memory for `CACHE_TTL` seconds to avoid hammering the API. If the API is unavailable, the last cached response is served (stale-on-error).

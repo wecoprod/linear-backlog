@@ -69,6 +69,7 @@ export async function getBacklog(): Promise<BacklogData> {
   const teamId = import.meta.env.LINEAR_TEAM_ID as string;
   const label = import.meta.env.LINEAR_LABEL as string;
   const projectId = import.meta.env.LINEAR_PROJECT_ID || undefined;
+  const projectName = import.meta.env.LINEAR_PROJECT || undefined;
   const ttl = Math.max(1, parseInt(import.meta.env.CACHE_TTL ?? '60', 10) || 60);
 
   if (!token || !teamId || !label) {
@@ -79,7 +80,7 @@ export async function getBacklog(): Promise<BacklogData> {
   if (cached && !cached.isStale) return cached.data;
 
   try {
-    const [statesData, issuesData] = await Promise.all([
+    const [statesData, issuesData, projectsData] = await Promise.all([
       linearQuery<{ workflowStates: { nodes: WorkflowState[] } }>(
         `query($teamId: ID!) {
           workflowStates(filter: { team: { id: { eq: $teamId } } }) {
@@ -98,10 +99,24 @@ export async function getBacklog(): Promise<BacklogData> {
         { teamId, label },
         token
       ),
+      projectName
+        ? linearQuery<{ projects: { nodes: { id: string; name: string }[] } }>(
+            `query($teamId: ID!) {
+              projects(filter: { members: { team: { id: { eq: $teamId } } } }) {
+                nodes { id name }
+              }
+            }`,
+            { teamId },
+            token
+          )
+        : Promise.resolve(null),
     ]);
 
-    const issues = projectId
-      ? issuesData.issues.nodes.filter(i => i.project?.id === projectId)
+    const resolvedProjectId = projectId
+      ?? projectsData?.projects.nodes.find(p => p.name === projectName)?.id;
+
+    const issues = resolvedProjectId
+      ? issuesData.issues.nodes.filter(i => i.project?.id === resolvedProjectId)
       : issuesData.issues.nodes;
     const columns = buildKanbanColumns(statesData.workflowStates.nodes, issues);
     cache.set('backlog', columns, ttl);

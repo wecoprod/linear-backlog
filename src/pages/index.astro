@@ -71,7 +71,11 @@ try {
       font-family: system-ui, -apple-system, sans-serif;
       background: var(--brand-bg);
       color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
+    main { flex: 1; }
     header {
       padding: 1rem 2rem;
       border-bottom: 1px solid var(--brand-border);
@@ -115,13 +119,15 @@ try {
     <h1>{title}</h1>
     {description && <p>{description}</p>}
   </header>
-  {error ? (
-    <div class="error">
-      <strong>Could not load issues.</strong> {error}
-    </div>
-  ) : (
-    <KanbanBoard columns={columns} label={label} t={t} />
-  )}
+  <main>
+    {error ? (
+      <div class="error">
+        <strong>Could not load issues.</strong> {error}
+      </div>
+    ) : (
+      <KanbanBoard columns={columns} label={label} t={t} />
+    )}
+  </main>
   <footer>Powered by <a href="https://www.wecoprod.com" target="_blank" rel="noopener noreferrer">wecoprod</a></footer>
 </body>
 </html>

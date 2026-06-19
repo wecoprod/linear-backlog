@@ -10,4 +10,5 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 4321
+ENV HOST=0.0.0.0
 CMD ["node", "./dist/server/entry.mjs"]

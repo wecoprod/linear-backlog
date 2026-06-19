@@ -9,7 +9,7 @@ Filter issues by a label (e.g. `show-backlog`) — only those issues appear on t
 1. Clone the repo and install dependencies:
 
 ```bash
-git clone https://github.com/your-org/linear-backlog.git
+git clone https://github.com/wecoprod/linear-backlog.git
 cd linear-backlog
 npm install
 ```
@@ -20,12 +20,16 @@ npm install
 cp .env.example .env
 ```
 
-| Variable | Description |
-|---|---|
-| `LINEAR_API_TOKEN` | Linear personal API key (Settings → API → Personal API keys) |
-| `LINEAR_TEAM_ID` | UUID of the Linear team (visible in the team URL or API) |
-| `LINEAR_LABEL` | Label name to filter issues (e.g. `show-backlog`) |
-| `CACHE_TTL` | Cache duration in seconds (default: `60`) |
+| Variable | Required | Description |
+|---|---|---|
+| `LINEAR_API_TOKEN` | ✓ | Linear personal API key (Settings → API → Personal API keys) |
+| `LINEAR_TEAM_ID` | ✓ | UUID of the Linear team (visible in the team URL or API) |
+| `LINEAR_LABEL` | ✓ | Label name to filter issues (e.g. `show-backlog`) |
+| `CACHE_TTL` | | Cache duration in seconds (default: `60`) |
+| `BRAND_COLOR` | | Hex color for theming borders and backgrounds (default: `"#6366f1"`) — wrap in quotes |
+| `BOARD_TITLE` | | Page title and header text (default: `Backlog`) |
+| `BOARD_DESCRIPTION` | | Subtitle displayed next to the title |
+| `BOARD_STATES` | | Comma-separated list of state names to display, in order (default: all states) |
 
 3. Add the label to issues in Linear that you want to display publicly.
 

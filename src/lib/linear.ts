@@ -59,9 +59,8 @@ export function buildKanbanColumns(states: WorkflowState[], issues: Issue[]): Ba
   }
 
   return states
-    .filter(s => byState.has(s.id))
     .sort((a, b) => a.position - b.position)
-    .map(s => ({ state: s, issues: byState.get(s.id)! }));
+    .map(s => ({ state: s, issues: byState.get(s.id) ?? [] }));
 }
 
 export async function getBacklog(): Promise<BacklogData> {

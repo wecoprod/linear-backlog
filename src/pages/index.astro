@@ -5,6 +5,35 @@ import type { BacklogData } from '../lib/linear';
 
 const label = import.meta.env.LINEAR_LABEL ?? 'show-backlog';
 const brand = import.meta.env.BRAND_COLOR ?? '#6366f1';
+const title = import.meta.env.BOARD_TITLE ?? 'Backlog';
+const description = import.meta.env.BOARD_DESCRIPTION ?? '';
+
+function parseHex(hex: string): [number, number, number] {
+  const h = hex.replace('#', '');
+  const full = h.length === 3
+    ? h.split('').map(c => c + c).join('')
+    : h;
+  return [
+    parseInt(full.slice(0, 2), 16),
+    parseInt(full.slice(2, 4), 16),
+    parseInt(full.slice(4, 6), 16),
+  ];
+}
+
+function mixHex(hex: string, base: string, amount: number): string {
+  const [r1, g1, b1] = parseHex(hex);
+  const [r2, g2, b2] = parseHex(base);
+  const t = amount / 100;
+  const r = Math.round(r1 * t + r2 * (1 - t));
+  const g = Math.round(g1 * t + g2 * (1 - t));
+  const b = Math.round(b1 * t + b2 * (1 - t));
+  return `rgb(${r},${g},${b})`;
+}
+
+const brandBg      = mixHex(brand, '#f8f9fa', 6);
+const brandBorder  = mixHex(brand, '#e0e0e0', 18);
+const brandGlow    = mixHex(brand, '#ffffff', 20);
+const brandCardBg  = mixHex(brand, '#f8f9fa', 3);
 
 let columns: BacklogData = [];
 let error: string | null = null;
@@ -18,11 +47,11 @@ try {
 ---
 
 <!DOCTYPE html>
-<html lang="en" style={`--brand:${brand};--brand-bg:color-mix(in srgb,${brand} 6%,#f8f9fa);--brand-border:color-mix(in srgb,${brand} 18%,#e0e0e0);--brand-glow:color-mix(in srgb,${brand} 20%,white);--brand-card-bg:color-mix(in srgb,${brand} 3%,#f8f9fa)`}>
+<html lang="en" style={`--brand:${brand};--brand-bg:${brandBg};--brand-border:${brandBorder};--brand-glow:${brandGlow};--brand-card-bg:${brandCardBg}`}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Backlog</title>
+  <title>{title}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body {
@@ -43,6 +72,11 @@ try {
       font-size: 1.125rem;
       font-weight: 600;
     }
+    header p {
+      margin: 0 0 0 1rem;
+      font-size: 0.875rem;
+      color: #888;
+    }
     .error {
       margin: 2rem;
       padding: 1rem 1.5rem;
@@ -55,7 +89,8 @@ try {
 </head>
 <body>
   <header>
-    <h1>Backlog</h1>
+    <h1>{title}</h1>
+    {description && <p>{description}</p>}
   </header>
   {error ? (
     <div class="error">

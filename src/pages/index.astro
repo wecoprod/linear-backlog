@@ -7,6 +7,9 @@ const label = import.meta.env.LINEAR_LABEL ?? 'show-backlog';
 const brand = import.meta.env.BRAND_COLOR ?? '#6366f1';
 const title = import.meta.env.BOARD_TITLE ?? 'Backlog';
 const description = import.meta.env.BOARD_DESCRIPTION ?? '';
+const boardStates: string[] = import.meta.env.BOARD_STATES
+  ? import.meta.env.BOARD_STATES.split(',').map((s: string) => s.trim()).filter(Boolean)
+  : [];
 
 function parseHex(hex: string): [number, number, number] {
   const h = hex.replace('#', '');
@@ -39,7 +42,14 @@ let columns: BacklogData = [];
 let error: string | null = null;
 
 try {
-  columns = await getBacklog();
+  const all = await getBacklog();
+  if (boardStates.length > 0) {
+    columns = boardStates
+      .map(name => all.find(col => col.state.name === name))
+      .filter((col): col is NonNullable<typeof col> => col != null);
+  } else {
+    columns = all;
+  }
 } catch (err) {
   error = err instanceof Error ? err.message : 'Failed to load issues';
   console.error('[linear-backlog] Failed to load backlog:', err);

@@ -4,13 +4,13 @@ import { getBacklog } from '../lib/linear';
 import type { BacklogData } from '../lib/linear';
 import { getT } from '../lib/i18n';
 
-const label = import.meta.env.LINEAR_LABEL ?? 'show-backlog';
-const t = getT(import.meta.env.BOARD_LOCALE ?? 'en');
-const brand = import.meta.env.BRAND_COLOR ?? '#6366f1';
-const title = import.meta.env.BOARD_TITLE ?? 'Backlog';
-const description = import.meta.env.BOARD_DESCRIPTION ?? '';
-const boardStates: string[] = import.meta.env.BOARD_STATES
-  ? import.meta.env.BOARD_STATES.split(',').map((s: string) => s.trim()).filter(Boolean)
+const label = process.env.LINEAR_LABEL ?? 'show-backlog';
+const t = getT(process.env.BOARD_LOCALE ?? 'en');
+const brand = process.env.BRAND_COLOR ?? '#6366f1';
+const title = process.env.BOARD_TITLE ?? 'Backlog';
+const description = process.env.BOARD_DESCRIPTION ?? '';
+const boardStates: string[] = process.env.BOARD_STATES
+  ? process.env.BOARD_STATES.split(',').map((s: string) => s.trim()).filter(Boolean)
   : [];
 
 function parseHex(hex: string): [number, number, number] {
@@ -59,7 +59,7 @@ try {
 ---
 
 <!DOCTYPE html>
-<html lang={import.meta.env.BOARD_LOCALE ?? 'en'} style={`--brand:${brand};--brand-bg:${brandBg};--brand-border:${brandBorder};--brand-glow:${brandGlow};--brand-card-bg:${brandCardBg}`}>
+<html lang={process.env.BOARD_LOCALE ?? 'en'} style={`--brand:${brand};--brand-bg:${brandBg};--brand-border:${brandBorder};--brand-glow:${brandGlow};--brand-card-bg:${brandCardBg}`}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />

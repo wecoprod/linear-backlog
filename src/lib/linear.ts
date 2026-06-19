@@ -65,12 +65,12 @@ export function buildKanbanColumns(states: WorkflowState[], issues: Issue[]): Ba
 }
 
 export async function getBacklog(): Promise<BacklogData> {
-  const token = import.meta.env.LINEAR_API_TOKEN as string;
-  const teamId = import.meta.env.LINEAR_TEAM_ID as string;
-  const label = import.meta.env.LINEAR_LABEL as string;
-  const projectId = import.meta.env.LINEAR_PROJECT_ID || undefined;
-  const projectName = import.meta.env.LINEAR_PROJECT || undefined;
-  const ttl = Math.max(1, parseInt(import.meta.env.CACHE_TTL ?? '60', 10) || 60);
+  const token = process.env.LINEAR_API_TOKEN as string;
+  const teamId = process.env.LINEAR_TEAM_ID as string;
+  const label = process.env.LINEAR_LABEL as string;
+  const projectId = process.env.LINEAR_PROJECT_ID || undefined;
+  const projectName = process.env.LINEAR_PROJECT || undefined;
+  const ttl = Math.max(1, parseInt(process.env.CACHE_TTL ?? '60', 10) || 60);
 
   if (!token || !teamId || !label) {
     throw new Error('Missing env vars: LINEAR_API_TOKEN, LINEAR_TEAM_ID, LINEAR_LABEL');

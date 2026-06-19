@@ -101,12 +101,8 @@ export async function getBacklog(): Promise<BacklogData> {
       ),
       projectName
         ? linearQuery<{ projects: { nodes: { id: string; name: string }[] } }>(
-            `query($teamId: ID!) {
-              projects(filter: { members: { team: { id: { eq: $teamId } } } }) {
-                nodes { id name }
-              }
-            }`,
-            { teamId },
+            `{ projects { nodes { id name } } }`,
+            {},
             token
           )
         : Promise.resolve(null),

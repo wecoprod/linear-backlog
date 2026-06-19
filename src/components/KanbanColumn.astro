@@ -1,13 +1,15 @@
 ---
 import IssueCard from './IssueCard.astro';
 import type { WorkflowState, Issue } from '../lib/linear';
+import type { getT } from '../lib/i18n';
 
 interface Props {
   state: WorkflowState;
   issues: Issue[];
+  t: ReturnType<typeof getT>;
 }
 
-const { state, issues } = Astro.props;
+const { state, issues, t } = Astro.props;
 ---
 
 <div class="column">
@@ -17,7 +19,7 @@ const { state, issues } = Astro.props;
     <span class="count">{issues.length}</span>
   </div>
   <div class="issue-list">
-    {issues.map(issue => <IssueCard issue={issue} stateType={state.type} />)}
+    {issues.map(issue => <IssueCard issue={issue} stateType={state.type} t={t} />)}
   </div>
 </div>
 

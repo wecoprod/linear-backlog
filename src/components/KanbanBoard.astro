@@ -1,23 +1,23 @@
 ---
 import KanbanColumn from './KanbanColumn.astro';
 import type { BacklogData } from '../lib/linear';
+import type { getT } from '../lib/i18n';
 
 interface Props {
   columns: BacklogData;
   label: string;
+  t: ReturnType<typeof getT>;
 }
 
-const { columns, label } = Astro.props;
+const { columns, label, t } = Astro.props;
 ---
 
 {columns.length === 0 ? (
-  <p class="empty">
-    No issues found. Add the <code>{label}</code> label to Linear issues to display them here.
-  </p>
+  <p class="empty">{t.empty(label)}</p>
 ) : (
   <div class="board">
     {columns.map(col => (
-      <KanbanColumn state={col.state} issues={col.issues} />
+      <KanbanColumn state={col.state} issues={col.issues} t={t} />
     ))}
   </div>
 )}
@@ -35,11 +35,5 @@ const { columns, label } = Astro.props;
     padding: 3rem 2rem;
     color: #888;
     font-size: 1rem;
-  }
-  code {
-    background: #f0f0f0;
-    padding: 0.1em 0.3em;
-    border-radius: 3px;
-    font-size: 0.9em;
   }
 </style>

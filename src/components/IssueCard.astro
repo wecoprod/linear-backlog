@@ -1,18 +1,20 @@
 ---
 import type { Issue } from '../lib/linear';
+import type { getT } from '../lib/i18n';
 
 interface Props {
   issue: Issue;
   stateType: string;
+  t: ReturnType<typeof getT>;
 }
 
-const { issue, stateType } = Astro.props;
+const { issue, stateType, t } = Astro.props;
 const isDone = stateType === 'completed' || stateType === 'cancelled';
 
 let completedLabel: string | null = null;
 if (isDone && issue.completedAt) {
   const d = new Date(issue.completedAt);
-  completedLabel = `✓ ${d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+  completedLabel = `✓ ${d.toLocaleDateString(t.dateLocale, { day: 'numeric', month: 'short', year: 'numeric' })}`;
 }
 
 let dueDateLabel: string | null = null;
@@ -24,10 +26,10 @@ if (issue.dueDate) {
   now.setHours(0, 0, 0, 0);
   const diff = Math.round((due.getTime() - now.getTime()) / 86400000);
   isOverdue = diff < 0 && !isDone;
-  if (diff < 0) dueDateLabel = isDone ? null : `En retard de ${Math.abs(diff)}j`;
-  else if (diff === 0) dueDateLabel = "Aujourd'hui";
-  else if (diff === 1) dueDateLabel = "Demain";
-  else dueDateLabel = `Dans ${diff}j`;
+  if (diff < 0)      dueDateLabel = isDone ? null : t.overdue(Math.abs(diff));
+  else if (diff === 0) dueDateLabel = t.today;
+  else if (diff === 1) dueDateLabel = t.tomorrow;
+  else                 dueDateLabel = t.inDays(diff);
 }
 ---
 

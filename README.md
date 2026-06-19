@@ -30,6 +30,7 @@ cp .env.example .env
 | `BOARD_TITLE` | | Page title and header text (default: `Backlog`) |
 | `BOARD_DESCRIPTION` | | Subtitle displayed next to the title |
 | `BOARD_STATES` | | Comma-separated list of state names to display, in order (default: all states) |
+| `BOARD_LOCALE` | | UI language: `en` or `fr` (default: `en`) |
 
 3. Add the label to issues in Linear that you want to display publicly.
 

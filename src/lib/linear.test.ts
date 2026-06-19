@@ -10,9 +10,9 @@ describe('buildKanbanColumns', () => {
   ];
 
   const issues: Issue[] = [
-    { id: 'i1', title: 'Fix bug', updatedAt: '2026-06-01T10:00:00Z', state: { id: 's1' } },
-    { id: 'i2', title: 'Add feature', updatedAt: '2026-06-02T10:00:00Z', state: { id: 's1' } },
-    { id: 'i3', title: 'Deploy', updatedAt: '2026-06-01T10:00:00Z', state: { id: 's2' } },
+    { id: 'i1', title: 'Fix bug', url: 'https://linear.app/i1', dueDate: null, completedAt: null, project: null, updatedAt: '2026-06-01T10:00:00Z', state: { id: 's1' } },
+    { id: 'i2', title: 'Add feature', url: 'https://linear.app/i2', dueDate: null, completedAt: null, project: null, updatedAt: '2026-06-02T10:00:00Z', state: { id: 's1' } },
+    { id: 'i3', title: 'Deploy', url: 'https://linear.app/i3', dueDate: null, completedAt: null, project: null, updatedAt: '2026-06-01T10:00:00Z', state: { id: 's2' } },
   ];
 
   it('groups issues by state', () => {

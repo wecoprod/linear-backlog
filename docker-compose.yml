@@ -2,6 +2,7 @@ services:
   app:
     image: ghcr.io/wecoprod/linear-backlog:latest
     ports:
-      - "4321:4321"
+      - "${PORT:-4321}:${PORT:-4321}"
     env_file:
       - .env
+    restart: unless-stopped

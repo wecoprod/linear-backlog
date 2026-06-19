@@ -34,7 +34,7 @@ if (issue.dueDate) {
 ---
 
 <div class="card">
-  <div class="title">{issue.title}</div>
+  <a class="title" href={issue.url} target="_blank" rel="noopener noreferrer">{issue.title}</a>
   {completedLabel && <div class="meta success">{completedLabel}</div>}
   {dueDateLabel && <div class={`meta ${isOverdue ? 'danger' : ''}`}>📅 {dueDateLabel}</div>}
 </div>
@@ -52,7 +52,10 @@ if (issue.dueDate) {
     font-weight: 500;
     color: #1a1a1a;
     overflow-wrap: break-word;
+    text-decoration: none;
+    display: block;
   }
+  .title:hover { text-decoration: underline; }
   .meta {
     margin-top: 0.35rem;
     font-size: 0.75rem;

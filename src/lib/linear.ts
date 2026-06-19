@@ -61,7 +61,8 @@ export function buildKanbanColumns(states: WorkflowState[], issues: Issue[]): Ba
 
   return states
     .sort((a, b) => a.position - b.position)
-    .map(s => ({ state: s, issues: byState.get(s.id) ?? [] }));
+    .map(s => ({ state: s, issues: byState.get(s.id) ?? [] }))
+    .filter(col => col.issues.length > 0);
 }
 
 export async function getBacklog(): Promise<BacklogData> {
@@ -90,10 +91,11 @@ export async function getBacklog(): Promise<BacklogData> {
         { teamId },
         token
       ),
-      linearQuery<{ issues: { nodes: Issue[] } }>(
+      linearQuery<{ issues: { nodes: Issue[]; pageInfo: { hasNextPage: boolean } } }>(
         `query($teamId: ID!, $label: String!) {
-          issues(filter: { team: { id: { eq: $teamId } }, labels: { name: { eq: $label } } }) {
+          issues(first: 250, filter: { team: { id: { eq: $teamId } }, labels: { name: { eq: $label } } }) {
             nodes { id title url dueDate completedAt updatedAt state { id } project { id } }
+            pageInfo { hasNextPage }
           }
         }`,
         { teamId, label },
@@ -101,8 +103,8 @@ export async function getBacklog(): Promise<BacklogData> {
       ),
       projectName
         ? linearQuery<{ projects: { nodes: { id: string; name: string }[] } }>(
-            `{ projects { nodes { id name } } }`,
-            {},
+            `query($projectName: String!) { projects(filter: { name: { eq: $projectName } }) { nodes { id name } } }`,
+            { projectName },
             token
           )
         : Promise.resolve(null),
@@ -110,6 +112,10 @@ export async function getBacklog(): Promise<BacklogData> {
 
     const resolvedProjectId = projectId
       ?? projectsData?.projects.nodes.find(p => p.name === projectName)?.id;
+
+    if (issuesData.issues.pageInfo.hasNextPage) {
+      console.warn('[linear-backlog] More than 250 issues found — only the first 250 are displayed.');
+    }
 
     const issues = resolvedProjectId
       ? issuesData.issues.nodes.filter(i => i.project?.id === resolvedProjectId)

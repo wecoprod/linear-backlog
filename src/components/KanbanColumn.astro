@@ -14,7 +14,7 @@ const { state, issues, t } = Astro.props;
 
 <div class="column">
   <div class="column-header">
-    <span class="dot" style={`background: ${state.color}`}></span>
+    <span class="dot" style={`background: ${/^#[0-9a-fA-F]{3,6}$/.test(state.color) ? state.color : '#888'}`}></span>
     {state.name}
     <span class="count">{issues.length}</span>
   </div>

@@ -17,7 +17,7 @@ const { state, issues } = Astro.props;
     <span class="count">{issues.length}</span>
   </div>
   <div class="issue-list">
-    {issues.map(issue => <IssueCard issue={issue} />)}
+    {issues.map(issue => <IssueCard issue={issue} stateType={state.type} />)}
   </div>
 </div>
 

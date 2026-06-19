@@ -3,40 +3,79 @@ import type { Issue } from '../lib/linear';
 
 interface Props {
   issue: Issue;
+  stateType: string;
 }
 
-const { issue } = Astro.props;
+const { issue, stateType } = Astro.props;
+const isDone = stateType === 'completed' || stateType === 'cancelled';
 
-const d = new Date(issue.updatedAt);
-const formatted = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+let completedLabel: string | null = null;
+if (isDone && issue.completedAt) {
+  const d = new Date(issue.completedAt);
+  completedLabel = `✓ ${d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+}
+
+let dueDateLabel: string | null = null;
+let isOverdue = false;
+if (issue.dueDate) {
+  const [y, m, day] = issue.dueDate.split('-').map(Number);
+  const due = new Date(y, m - 1, day);
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const diff = Math.round((due.getTime() - now.getTime()) / 86400000);
+  isOverdue = diff < 0 && !isDone;
+  if (diff < 0) dueDateLabel = isDone ? null : `En retard de ${Math.abs(diff)}j`;
+  else if (diff === 0) dueDateLabel = "Aujourd'hui";
+  else if (diff === 1) dueDateLabel = "Demain";
+  else dueDateLabel = `Dans ${diff}j`;
+}
 ---
 
-<div class="card">
+<a class="card" href={issue.url} target="_blank" rel="noopener noreferrer">
   <div class="title">{issue.title}</div>
-  <div class="meta">Updated {formatted}</div>
-</div>
+  {completedLabel && <div class="completed">{completedLabel}</div>}
+  {dueDateLabel && (
+    <div class={`due ${isOverdue ? 'overdue' : ''}`}>
+      📅 {dueDateLabel}
+    </div>
+  )}
+</a>
 
 <style>
   .card {
+    display: block;
     background: #f8f9fa;
     border: 1px solid #e8e8e8;
     border-radius: 6px;
     padding: 0.625rem 0.75rem;
     font-size: 0.875rem;
     line-height: 1.4;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
   }
   .card:hover {
-    border-color: #bbb;
+    border-color: #6366f1;
     background: #fff;
+    box-shadow: 0 0 0 2px #e0e7ff;
   }
   .title {
     font-weight: 500;
     color: #1a1a1a;
     word-break: break-word;
   }
-  .meta {
-    margin-top: 0.25rem;
-    font-size: 0.75rem;
-    color: #999;
+  .due {
+    margin-top: 0.35rem;
+    font-size: 0.72rem;
+    color: #6b7280;
+  }
+  .due.overdue {
+    color: #dc2626;
+    font-weight: 600;
+  }
+  .completed {
+    margin-top: 0.35rem;
+    font-size: 0.72rem;
+    color: #16a34a;
   }
 </style>

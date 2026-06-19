@@ -11,6 +11,9 @@ export interface WorkflowState {
 export interface Issue {
   id: string;
   title: string;
+  url: string;
+  dueDate: string | null;
+  completedAt: string | null;
   updatedAt: string;
   state: { id: string };
 }
@@ -88,7 +91,7 @@ export async function getBacklog(): Promise<BacklogData> {
       linearQuery<{ issues: { nodes: Issue[] } }>(
         `query($teamId: ID!, $label: String!) {
           issues(filter: { team: { id: { eq: $teamId } }, labels: { name: { eq: $label } } }) {
-            nodes { id title updatedAt state { id } }
+            nodes { id title url dueDate completedAt updatedAt state { id } }
           }
         }`,
         { teamId, label },

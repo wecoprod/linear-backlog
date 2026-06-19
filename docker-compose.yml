@@ -1,10 +1,7 @@
 services:
   app:
-    build: .
+    image: ghcr.io/wecoprod/linear-backlog:latest
     ports:
       - "4321:4321"
     env_file:
       - .env
-    environment:
-      HOST: "0.0.0.0"
-      CACHE_TTL: ${CACHE_TTL:-60}

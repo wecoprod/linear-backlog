@@ -50,15 +50,14 @@ npm start        # Start production server
 ## Docker
 
 ```bash
-# Use the pre-built image from GitHub Container Registry
-docker run -p 4321:4321 --env-file .env ghcr.io/wecoprod/linear-backlog:latest
+# Pull and run with docker compose (recommended)
+docker compose up
 
-# Or build locally
-docker build -t linear-backlog .
-docker run -p 4321:4321 --env-file .env linear-backlog
+# Or run directly
+docker run -p 4321:4321 --env-file .env ghcr.io/wecoprod/linear-backlog:latest
 ```
 
-> **Note:** `docker compose up` reads your shell environment variables or an `.env` file in the project root.
+> **Note:** `docker compose up` uses the pre-built image from GitHub Container Registry and reads your `.env` file.
 
 ## How it works
 
